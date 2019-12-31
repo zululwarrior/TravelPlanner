@@ -12,14 +12,13 @@ class Passenger:
 
     def walk_time(self):
         walking_time = math.sqrt(
-            (self.end[0] - self.start[0])**2 + (self.end[1] - self.start[1]**2)) * self.speed
+            (self.end[0] - self.start[0])**2 + (self.end[1] - self.start[1])**2) * self.speed
         return walking_time
 
 
 class Route:
     def __init__(self, file_name, speed=None):
         self.file_name = file_name
-
         DIR = Path(__file__).parent
         route_csv = np.genfromtxt(
             DIR / file_name, delimiter=(','), dtype=(int, int, 'U10'), encoding=None)
