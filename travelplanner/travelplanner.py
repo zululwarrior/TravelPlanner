@@ -32,7 +32,7 @@ class Passenger:
 
 
 class Route:
-    def __init__(self, file_name):
+    def __init__(self, file_name, speed=None):
         self.file_name = file_name
 
         DIR = Path(__file__).parent
@@ -42,6 +42,7 @@ class Route:
         route = [(int(x), int(y), stop.replace("'", ""))
                  for x, y, stop in route_csv]
         self.route = route
+        self.speed = speed if speed is not None else 10
 
     def plot_map(self):
         route = self.route
@@ -65,7 +66,7 @@ class Route:
         for step in route:
             if step[2]:
                 stops[step[2]] = time
-            time += 10
+            time += self.speed
         return stops
 
     def generate_cc(self):
