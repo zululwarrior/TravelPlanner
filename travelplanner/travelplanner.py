@@ -188,14 +188,6 @@ class Journey:
         print("Average walking time: ", total_walk/(id), " min")
 
 
-john = Passenger(start=(2, 1), end=(8, 2), speed=15)
-mary = Passenger(start=(13, 0), end=(20, 0), speed=8)
-route1 = Route("route.csv")
-journey = Journey(route1, [mary, john])
-journey.print_time_stats()
-print(journey.travel_time(2))
-
-
 def timetable(route):
     '''
     Generates a timetable for a route as minutes from its first stop.
