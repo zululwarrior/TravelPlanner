@@ -29,3 +29,22 @@ def test_timetable():
     result = r.timetable()
     expected = {'A': 0, 'B': 320, 'C': 500}
     assert result == expected
+
+
+def test_travel_time():
+    john = Passenger(start=(0, 2), end=(8, 1), speed=15)
+    mary = Passenger(start=(8, 2), end=(2, 4), speed=23)
+    connor = Passenger(start=(10, 8), end=(1, 2), speed=28)
+    route = Route(DIR / "route.csv")
+    journey = Journey(route, [john, mary, connor])
+    id = 0
+    results = []
+
+    for passenger in journey.passengers:
+        results.append(journey.travel_time(id))
+        id += 1
+
+    expected = [{'bus': 0, 'walk': 120.93386622447824}, {
+        'bus': 0, 'walk': 145.46477236774547}, {'bus': 250, 'walk': 39.59797974644666}]
+
+    assert expected == results

@@ -157,7 +157,7 @@ class Journey:
             walk_distance_stops[1][0] * passenger.speed
         distance = math.sqrt((passenger.end[0] - passenger.start[0])**2 +
                              (passenger.end[1] - passenger.start[1])**2)
-        if((distance * passenger.speed) <= (bus_travel + walk_travel)):
+        if((distance * passenger.speed) <= (bus_travel + walk_travel) or bus_travel < 0):
             bus_travel = 0
             walk_travel = distance * passenger.speed
         travel_dict = {"bus": bus_travel,
