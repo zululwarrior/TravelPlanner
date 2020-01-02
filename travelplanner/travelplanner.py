@@ -23,6 +23,11 @@ class Passenger:
         self.speed = speed
 
     def walk_time(self):
+        '''Returns walking time of passenger
+        >>> p = Passenger((1, 1), (5, 8), 10)
+        >>> print p.walk_time()
+        80.62257748298549
+        '''
         walking_time = math.sqrt(
             (self.end[0] - self.start[0])**2 + (self.end[1] - self.start[1])**2) * self.speed
         return walking_time
@@ -201,3 +206,8 @@ class Journey:
             id += 1
         print("Average time on bus:", total_bus/(id),
               "min\nAverage walking time:", total_walk/(id), "min")
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
