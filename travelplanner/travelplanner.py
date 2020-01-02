@@ -10,9 +10,13 @@ class Passenger:
             raise TypeError("Speed must be an int")
         if speed <= 0:
             raise ValueError("Speed cannot be equal or less than 0")
-        if isinstance(start, tuple) and list(map(type, start)) != [int, int]:
+        if not isinstance(start, tuple):
             raise TypeError("Start must be a tuple of 2 ints e.g. (1,1)")
-        if isinstance(end, tuple) and list(map(type, end)) != [int, int]:
+        if not isinstance(end, tuple):
+            raise TypeError("End must be a tuple of 2 ints e.g. (1,1)")
+        if list(map(type, start)) != [int, int]:
+            raise TypeError("Start must be a tuple of 2 ints e.g. (1,1)")
+        if list(map(type, end)) != [int, int]:
             raise TypeError("End must be a tuple of 2 ints e.g. (1,1)")
         self.start = start
         self.end = end
