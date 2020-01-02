@@ -208,6 +208,15 @@ class Journey:
               "min\nAverage walking time:", total_walk/(id), "min")
 
 
+def read_passengers(file):
+    DIR = Path(__file__).parent
+    passengers_list = []
+    passengers = np.genfromtxt(DIR / file, delimiter=(','), dtype=int)
+    for x, y, x1, y1, pace in passengers:
+        passengers_list.append(((x, y), (x1, y1), pace))
+    return passengers_list
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
