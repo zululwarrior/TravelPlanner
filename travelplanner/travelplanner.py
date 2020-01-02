@@ -6,6 +6,14 @@ from pathlib import Path
 
 class Passenger:
     def __init__(self, start, end, speed):
+        if not isinstance(speed, int):
+            raise TypeError("Speed must be an int")
+        if speed <= 0:
+            raise ValueError("Speed cannot be equal or less than 0")
+        if isinstance(start, tuple) and list(map(type, start)) != [int, int]:
+            raise TypeError("Start must be a tuple of 2 ints e.g. (1,1)")
+        if isinstance(end, tuple) and list(map(type, end)) != [int, int]:
+            raise TypeError("End must be a tuple of 2 ints e.g. (1,1)")
         self.start = start
         self.end = end
         self.speed = speed
@@ -18,6 +26,9 @@ class Passenger:
 
 class Route:
     def __init__(self, file_name, speed=None):
+        if not isinstance(file_name, type(Path(__file__))) and not isinstance(file_name, str):
+            raise TypeError("File name must be a string or a path")
+
         self.file_name = file_name
         DIR = Path(__file__).parent
         route_csv = np.genfromtxt(
@@ -27,6 +38,11 @@ class Route:
                  for x, y, stop in route_csv]
         self.route = route
         self.speed = speed if speed is not None else 10
+
+        if not isinstance(self.speed, int):
+            raise TypeError("Speed must be an int")
+        if self.speed <= 0:
+            raise ValueError("Speed cannot be equal or less than 0")
         self.generate_cc()
 
     def plot_map(self):
@@ -79,6 +95,12 @@ class Route:
 
 class Journey:
     def __init__(self, route, passengers):
+        if not isinstance(route, Route):
+            raise TypeError("1st argument must be of type route")
+        if not isinstance(passengers, list):
+            raise TypeError("2nd argument must be a list of type passenger")
+        if not all(isinstance(passenger, Passenger) for passenger in passengers):
+            raise TypeError("2nd argument must of a list of type passenger")
         self.route = route
         self.passengers = passengers
 
