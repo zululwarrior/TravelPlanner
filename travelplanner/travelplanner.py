@@ -25,7 +25,7 @@ class Passenger:
     def walk_time(self):
         '''Returns walking time of passenger
         >>> p = Passenger((1, 1), (5, 8), 10)
-        >>> print p.walk_time()
+        >>> print(p.walk_time())
         80.62257748298549
         '''
         walking_time = math.sqrt(
