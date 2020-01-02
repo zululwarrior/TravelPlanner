@@ -173,5 +173,5 @@ class Journey:
             total_bus = travel_dict["bus"] + total_bus
             total_walk = travel_dict["walk"] + total_walk
             id += 1
-        print("Average time on bus: ", total_bus/(id), " min")
-        print("Average walking time: ", total_walk/(id), " min")
+        print("Average time on bus:", total_bus/(id),
+              "min\nAverage walking time:", total_walk/(id), "min")
