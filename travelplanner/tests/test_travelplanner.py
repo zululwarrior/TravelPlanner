@@ -11,51 +11,33 @@ DIR = Path(__file__).parent
 def test_constructor_input():
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), (2, 1), 1.1)
-    assert str(
-        e.value) == "Speed must be an int"
 
     with pytest.raises(ValueError) as e:
         p = Passenger((1, 1), (2, 1), -1)
-    assert str(
-        e.value) == "Speed cannot be equal or less than 0"
 
     with pytest.raises(TypeError) as e:
         p = Passenger(1, (2, 1), 5)
-    assert str(
-        e.value) == "Start must be a tuple of 2 ints e.g. (1,1)"
 
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), 1, 5)
-    assert str(
-        e.value) == "End must be a tuple of 2 ints e.g. (1,1)"
 
     with pytest.raises(TypeError) as e:
         r = Route(123)
-    assert str(
-        e.value) == "File name must be a string or a path"
 
     with pytest.raises(TypeError) as e:
         r = Route("route.csv", "12")
-    assert str(
-        e.value) == "Speed must be an int"
 
     with pytest.raises(ValueError) as e:
         r = Route("route.csv", -10)
-    assert str(
-        e.value) == "Speed cannot be equal or less than 0"
 
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), (1, 2), 5)
         j = Journey("route", [p])
-    assert str(
-        e.value) == "1st argument must be of type route"
 
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), (1, 2), 5)
         r = Route("route.csv")
         j = Journey(r, p)
-    assert str(
-        e.value) == "2nd argument must be a list of type passenger"
 
 
 def test_walk_time():
@@ -178,12 +160,8 @@ def test_generate_cc(capsys):
     with pytest.raises(ValueError) as e:
         route = Route(DIR / "route.csv")
         route.generate_cc()
-    assert str(
-        e.value) == "Invalid route, bus can only move horizontally or vertically"
 
     # test invalid route with speed
     with pytest.raises(ValueError) as e:
         route = Route(DIR / "route.csv", 5)
         route.generate_cc()
-    assert str(
-        e.value) == "Invalid route, bus can only move horizontally or vertically"
