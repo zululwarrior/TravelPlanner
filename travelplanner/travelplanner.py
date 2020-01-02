@@ -5,6 +5,13 @@ from pathlib import Path
 
 
 class Passenger:
+    ''' Passenger of a trip
+        :Parameters:
+            start: The starting coordinates of the passenger
+            end: The ending coordinates of the passenger
+            speed: The speed at which the passenger walks (minutes per unit)
+    '''
+
     def __init__(self, start, end, speed):
         if not isinstance(speed, int):
             raise TypeError("Speed must be an int")
@@ -34,6 +41,13 @@ class Passenger:
 
 
 class Route:
+    ''' A route for the bus
+        :Parameters:
+            file_name: csv file name
+            speed: The speed at which the move moves(minutes per unit). 
+                Set to 10 if not defined
+    '''
+
     def __init__(self, file_name, speed=None):
         if not isinstance(file_name, type(Path(__file__))) and not isinstance(file_name, str):
             raise TypeError("File name must be a string or a path")
@@ -103,6 +117,12 @@ class Route:
 
 
 class Journey:
+    ''' The journey of passengers in a particular route
+        :Parameters:
+            route: A route object
+            passengers: A list of passenger objects
+    '''
+
     def __init__(self, route, passengers):
         if not isinstance(route, Route):
             raise TypeError("1st argument must be of type route")

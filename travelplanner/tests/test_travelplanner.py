@@ -161,3 +161,18 @@ def test_generate_cc(capsys, write_file):
     with pytest.raises(ValueError) as e:
         route = Route(DIR / "route.csv", 5)
         route.generate_cc()
+
+
+def test_passenger_trip(write_file, passengers):
+    route = Route(DIR / "route.csv")
+    journey = Journey(route, passengers)
+
+    # test without speed
+    results = []
+    for passenger in journey.passengers:
+        results.append(journey.passenger_trip(passenger))
+
+    expected = [((1.0, 'C'), (7.280109889280518, 'A')), ((1.0, 'A'),
+                                                         (2.0, 'B')), ((0.0, 'A'), (1.4142135623730951, 'C'))]
+
+    assert expected == results
