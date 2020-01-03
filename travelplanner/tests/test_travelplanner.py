@@ -209,3 +209,13 @@ def test_passenger_trip(write_file, passengers):
 
     with pytest.raises(TypeError) as e:
         journey.passenger_trip(2)
+
+
+def test_read_passengers():
+    f = open(DIR / "passenger.csv", "w")
+    f.write("5,0,5,7,13\n3,10,10,18,19\n22,7,0,16,22\n8,17,7,0,15\n6,5,13,0,24\n3,2,0,7,24\n8,17,6,0,14\n9,1,17,6,23\n")
+    f.close()
+    result = read_passengers(DIR / "passenger.csv")
+    expected = [((5, 0), (5, 7), 13), ((3, 10), (10, 18), 19), ((22, 7), (0, 16), 22), ((8, 17), (7, 0), 15), ((
+        6, 5), (13, 0), 24), ((3, 2), (0, 7), 24), ((8, 17), (6, 0), 14), ((9, 1), (17, 6), 23)]
+    assert result == expected
