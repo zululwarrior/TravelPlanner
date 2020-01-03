@@ -219,3 +219,6 @@ def test_read_passengers():
     expected = [((5, 0), (5, 7), 13), ((3, 10), (10, 18), 19), ((22, 7), (0, 16), 22), ((8, 17), (7, 0), 15), ((
         6, 5), (13, 0), 24), ((3, 2), (0, 7), 24), ((8, 17), (6, 0), 14), ((9, 1), (17, 6), 23)]
     assert result == expected
+
+    with pytest.raises(TypeError) as e:
+        read_passengers(123)
