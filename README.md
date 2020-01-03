@@ -26,5 +26,5 @@ journey = Journey(route, [mary, john])
 Or in the terminal:
 
 ```bash
-$ bussimula route.csv passenger.csv --speed 10 --saveplots
+$ bussimula C:\Users\USER\Desktop\route.csv C:\Users\USER\Desktop\passenger.csv --speed 10 --saveplots
 ```
