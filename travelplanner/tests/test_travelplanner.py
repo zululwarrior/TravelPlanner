@@ -68,10 +68,16 @@ def test_constructor_input():
 
 
 def test_walk_time():
+    # test correct input
     p = Passenger((1, 1), (5, 8), 10)
     expected = 80.6
-    walk_time = p.walk_time()
-    assert walk_time == pytest.approx(expected, 0.01)
+    result = p.walk_time()
+    assert result == pytest.approx(expected, 0.01)
+
+    # test 0 input
+    p = Passenger((0, 0), (0, 0), 1)
+    result = p.walk_time()
+    assert result == 0
 
 
 def test_timetable(write_file):
@@ -88,9 +94,8 @@ def test_timetable(write_file):
 
 
 def test_travel_time(write_file, passengers):
-
-    journey = Journey(write_file, passengers)
     # test without speed
+    journey = Journey(write_file, passengers)
     id = 0
     results = []
     for passenger in journey.passengers:
@@ -108,10 +113,10 @@ def test_travel_time(write_file, passengers):
             'walk') == pytest.approx(expect.get('walk'), 0.1)
         counter += 1
 
+    # test without speed
     route = Route(DIR / "route.csv", 5)
     journey = Journey(route, passengers)
 
-    # test with speed
     id = 0
     results = []
     for passenger in journey.passengers:
@@ -140,10 +145,8 @@ def test_travel_time(write_file, passengers):
 
 
 def test_print_time_stats(capsys, write_file, passengers):
-
-    journey = Journey(write_file, passengers)
-
     # test without speed
+    journey = Journey(write_file, passengers)
     journey.print_time_stats()
     result = capsys.readouterr()
     string = result.out
@@ -158,10 +161,9 @@ def test_print_time_stats(capsys, write_file, passengers):
 
     np.testing.assert_array_almost_equal(expected, l, 1)
 
+    # test with speed
     route = Route(DIR / "route.csv", 5)
     journey = Journey(route, passengers)
-
-    # test with speed
     journey.print_time_stats()
     result = capsys.readouterr()
     string = result.out
@@ -205,6 +207,7 @@ def test_generate_cc(capsys, write_file):
 
 
 def test_passenger_trip(write_file, passengers):
+    # test with incorrect input
     journey = Journey(write_file, passengers)
 
     with pytest.raises(TypeError) as e:
@@ -212,6 +215,7 @@ def test_passenger_trip(write_file, passengers):
 
 
 def test_read_passengers():
+    # test with correct input
     f = open(DIR / "passenger.csv", "w")
     f.write("5,0,5,7,13\n3,10,10,18,19\n22,7,0,16,22\n8,17,7,0,15\n6,5,13,0,24\n3,2,0,7,24\n8,17,6,0,14\n9,1,17,6,23\n")
     f.close()
@@ -220,5 +224,6 @@ def test_read_passengers():
         6, 5), (13, 0), 24), ((3, 2), (0, 7), 24), ((8, 17), (6, 0), 14), ((9, 1), (17, 6), 23)]
     assert result == expected
 
+    # test with incorrect input
     with pytest.raises(TypeError) as e:
         read_passengers(123)
