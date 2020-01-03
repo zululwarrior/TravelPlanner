@@ -56,7 +56,7 @@ def test_constructor_input():
 
 def test_walk_time():
     p = Passenger((1, 1), (5, 8), 10)
-    expected = math.sqrt((1-5)**2 + (1-8)**2) * 10
+    expected = 80.6
     walk_time = p.walk_time()
     assert walk_time == pytest.approx(expected, 0.01)
 
@@ -88,10 +88,16 @@ def test_travel_time(write_file, passengers):
         results.append(journey.travel_time(id))
         id += 1
 
-    expected = [{'bus': 0, 'walk': 120.93386622447824}, {
-        'bus': 0, 'walk': 185.43192821086663}, {'bus': 250, 'walk': 39.59797974644666}]
+    expected = [{'bus': 0, 'walk': 120.9}, {
+        'bus': 0, 'walk': 185.4}, {'bus': 250, 'walk': 39.6}]
+    counter = 0
 
-    assert expected == results
+    for expect in expected:
+        assert results[counter].get(
+            'bus') == pytest.approx(expect.get('bus'), 0.1)
+        assert results[counter].get(
+            'walk') == pytest.approx(expect.get('walk'), 0.1)
+        counter += 1
 
     route = Route(DIR / "route.csv", 5)
     journey = Journey(route, passengers)
@@ -103,10 +109,25 @@ def test_travel_time(write_file, passengers):
         results.append(journey.travel_time(id))
         id += 1
 
-    expected = [{'bus': 0, 'walk': 120.93386622447824}, {
-        'bus': 80, 'walk': 69.0}, {'bus': 125, 'walk': 39.59797974644666}]
+    expected = [{'bus': 0, 'walk': 120.9}, {
+        'bus': 80, 'walk': 69.0}, {'bus': 125, 'walk': 39.6}]
 
-    assert expected == results
+    counter = 0
+
+    for expect in expected:
+        assert results[counter].get(
+            'bus') == pytest.approx(expect.get('bus'), 0.1)
+        assert results[counter].get(
+            'walk') == pytest.approx(expect.get('walk'), 0.1)
+        counter += 1
+
+    # test id value bigger than passenger list
+    with pytest.raises(ValueError) as e:
+        journey.travel_time(200)
+
+    # test id value less than 0
+    with pytest.raises(ValueError) as e:
+        journey.travel_time(-100)
 
 
 def test_print_time_stats(capsys, write_file, passengers):
@@ -117,9 +138,17 @@ def test_print_time_stats(capsys, write_file, passengers):
     # test without speed
     journey.print_time_stats()
     result = capsys.readouterr()
-    expected = (
-        "Average time on bus: 83.33333333333333 min\nAverage walking time: 115.32125806059717 min\n")
-    assert result.out == expected
+    string = result.out
+
+    l = []
+    for s in string.split():
+        try:
+            l.append(float(s))
+        except ValueError:
+            pass
+    expected = [83.3, 115.3]
+
+    np.testing.assert_array_almost_equal(expected, l, 1)
 
     route = Route(DIR / "route.csv", 5)
     journey = Journey(route, passengers)
@@ -127,10 +156,17 @@ def test_print_time_stats(capsys, write_file, passengers):
     # test with speed
     journey.print_time_stats()
     result = capsys.readouterr()
+    string = result.out
 
-    expected = (
-        "Average time on bus: 68.33333333333333 min\nAverage walking time: 76.51061532364163 min\n")
-    assert result.out == expected
+    l = []
+    for s in string.split():
+        try:
+            l.append(float(s))
+        except ValueError:
+            pass
+    expected = [68.3, 76.5]
+
+    np.testing.assert_array_almost_equal(expected, l, 1)
 
 
 def test_generate_cc(capsys, write_file):
