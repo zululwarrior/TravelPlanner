@@ -235,6 +235,8 @@ class Journey:
 
 
 def read_passengers(file):
+    if not isinstance(file, type(Path(__file__))) and not isinstance(file, str):
+        raise TypeError("File name must be a string or a path")
     DIR = Path(__file__).parent
     passengers_list = []
     passengers = np.genfromtxt(DIR / file, delimiter=(','), dtype=int)
