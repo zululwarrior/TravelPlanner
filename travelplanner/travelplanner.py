@@ -44,7 +44,7 @@ class Route:
     ''' A route for the bus
         :Parameters:
             file_name: csv file name
-            speed: The speed at which the move moves(minutes per unit). 
+            speed: The speed at which the bus moves(minutes per unit). 
                 Set to 10 if not defined
     '''
 
@@ -239,7 +239,8 @@ def read_passengers(file):
     passengers_list = []
     passengers = np.genfromtxt(DIR / file, delimiter=(','), dtype=int)
     for x, y, x1, y1, pace in passengers:
-        passengers_list.append(((x, y), (x1, y1), pace))
+        passengers_list.append(
+            ((int(x), int(y)), (int(x1), int(y1)), int(pace)))
     return passengers_list
 
 
