@@ -1,4 +1,4 @@
-from ..travelplanner import Passenger, Route, Journey
+from ..travelplanner import Passenger, Route, Journey, read_passengers
 import numpy as np
 import math
 import pytest
@@ -12,6 +12,8 @@ def write_file():
     f = open(DIR / "route.csv", "w")
     f.write("10,8,A\n10,9,\n10,10,\n10,11,\n9,11,\n8,11,\n7,11,\n7,10,\n7,9,\n6,9,\n5,9,\n4,9,\n3,9,\n2,9,\n2,8,\n2,7,\n2,6,B\n2,5,\n2,4,\n2,3,\n2,2,\n2,1,\n1,1,\n0,1,\n0,2,\n0,3,C\n")
     f.close()
+    route = Route(DIR / "route.csv")
+    return route
 
 
 @pytest.fixture
@@ -33,7 +35,13 @@ def test_constructor_input():
         p = Passenger(1, (2, 1), 5)
 
     with pytest.raises(TypeError) as e:
+        p = Passenger((1, 2, 3), (2, 1), 5)
+
+    with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), 1, 5)
+
+    with pytest.raises(TypeError) as e:
+        p = Passenger((1, 2), (2, 1.5), 5)
 
     with pytest.raises(TypeError) as e:
         r = Route(123)
@@ -53,6 +61,11 @@ def test_constructor_input():
         r = Route("route.csv")
         j = Journey(r, p)
 
+    with pytest.raises(TypeError) as e:
+        p = Passenger((1, 1), (1, 2), 5)
+        r = Route("route.csv")
+        j = Journey(r, ["passenger", "passenger1"])
+
 
 def test_walk_time():
     p = Passenger((1, 1), (5, 8), 10)
@@ -62,10 +75,8 @@ def test_walk_time():
 
 
 def test_timetable(write_file):
-
     # test without speed
-    r = Route(DIR / "route.csv")
-    result = r.timetable()
+    result = write_file.timetable()
     expected = {'A': 0, 'B': 160, 'C': 250}
     assert result == expected
 
@@ -78,9 +89,7 @@ def test_timetable(write_file):
 
 def test_travel_time(write_file, passengers):
 
-    route = Route(DIR / "route.csv")
-    journey = Journey(route, passengers)
-
+    journey = Journey(write_file, passengers)
     # test without speed
     id = 0
     results = []
@@ -132,8 +141,7 @@ def test_travel_time(write_file, passengers):
 
 def test_print_time_stats(capsys, write_file, passengers):
 
-    route = Route(DIR / "route.csv")
-    journey = Journey(route, passengers)
+    journey = Journey(write_file, passengers)
 
     # test without speed
     journey.print_time_stats()
@@ -172,9 +180,7 @@ def test_print_time_stats(capsys, write_file, passengers):
 def test_generate_cc(capsys, write_file):
 
     # test without speed
-    route = Route(DIR / "route.csv")
-
-    result = route.generate_cc()
+    result = write_file.generate_cc()
     expected = ((10, 8), '6664442244444222222224466')
     assert result == expected
 
@@ -189,26 +195,17 @@ def test_generate_cc(capsys, write_file):
     f = open(DIR / "route.csv", "w")
     f.write("10,8,A\n11,9,\n10,10,\n10,11,\n9,11,\n8,11,\n7,11,\n7,10,\n7,9,\n6,9,\n5,9,\n4,9,\n3,9,\n2,9,\n2,8,\n2,7,\n2,6,B\n2,5,\n2,4,\n2,3,\n2,2,\n2,1,\n1,1,\n0,1,\n0,2,\n0,3,C\n")
     f.close()
+
     with pytest.raises(ValueError) as e:
         route = Route(DIR / "route.csv")
-        route.generate_cc()
 
     # test invalid route with speed
     with pytest.raises(ValueError) as e:
         route = Route(DIR / "route.csv", 5)
-        route.generate_cc()
 
 
 def test_passenger_trip(write_file, passengers):
-    route = Route(DIR / "route.csv")
-    journey = Journey(route, passengers)
+    journey = Journey(write_file, passengers)
 
-    # test without speed
-    results = []
-    for passenger in journey.passengers:
-        results.append(journey.passenger_trip(passenger))
-
-    expected = [((1.0, 'C'), (7.280109889280518, 'A')), ((1.0, 'A'),
-                                                         (2.0, 'B')), ((0.0, 'A'), (1.4142135623730951, 'C'))]
-
-    assert expected == results
+    with pytest.raises(TypeError) as e:
+        journey.passenger_trip(2)
