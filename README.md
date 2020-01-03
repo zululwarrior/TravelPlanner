@@ -23,6 +23,8 @@ route = Route("route.csv")
 journey = Journey(route, [mary, john])
 ```
 
+Or in the terminal:
+
 ```bash
 $ bussimula route.csv passenger.csv --speed 10 --saveplots
 ```
