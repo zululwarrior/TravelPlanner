@@ -134,6 +134,8 @@ class Journey:
         self.passengers = passengers
 
     def passenger_trip(self, passenger):
+        if not isinstance(passenger, Passenger):
+            raise TypeError("1st argument must of of type passenger")
         stops = [value for value in self.route.route if value[2]]
         # calculate closer stop
         # to start
@@ -199,6 +201,10 @@ class Journey:
         plt.show()
 
     def travel_time(self, id):
+        if id >= len(self.passengers):
+            raise ValueError("This id does not exist")
+        elif id < 0:
+            raise ValueError("Id cannot be less than 0")
         passenger = self.passengers[id]
         walk_distance_stops = self.passenger_trip(passenger)
         bus_times = self.route.timetable()
