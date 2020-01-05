@@ -55,10 +55,8 @@ class Route:
             raise TypeError("File name must be a string or a path")
 
         self.file_name = file_name
-        DIR = Path(__file__).parent
-        route_csv = np.genfromtxt(
-            DIR / file_name, delimiter=(','),
-            dtype=(int, int, 'U10'), encoding=None)
+        route_csv = np.genfromtxt(file_name, delimiter=(','),
+                                  dtype=(int, int, 'U10'), encoding=None)
 
         route = [(int(x), int(y), stop.replace("'", ""))
                  for x, y, stop in route_csv]
@@ -116,8 +114,7 @@ class Route:
             y_step = b[1] - a[1]
             if freeman_coord2cc[(x_step, y_step)] not in (0, 2, 4, 6):
                 raise ValueError(
-                    "Invalid route, \
-                        bus can only move horizontally or vertically")
+                    "Diagonal moves are not allowed")
             cc.append(str(freeman_coord2cc[(x_step, y_step)]))
         return start, ''.join(cc)
 
@@ -256,9 +253,8 @@ def read_passengers(file):
     if not isinstance(file, type(Path(__file__)))\
             and not isinstance(file, str):
         raise TypeError("File name must be a string or a path")
-    DIR = Path(__file__).parent
     passengers_list = []
-    passengers = np.genfromtxt(DIR / file, delimiter=(','), dtype=int)
+    passengers = np.genfromtxt(file, delimiter=(','), dtype=int)
     for x, y, x1, y1, pace in passengers:
         passengers_list.append(
             ((int(x), int(y)), (int(x1), int(y1)), int(pace)))
