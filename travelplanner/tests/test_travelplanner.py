@@ -28,7 +28,8 @@ def passengers():
     return [john, mary, connor]
 
 
-def test_constructor_input():
+def test_constructor_input(write_file):
+    write_file
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), (2, 1), 1.1)
 
