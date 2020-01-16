@@ -47,23 +47,23 @@ def test_constructor_input():
         r = Route(123)
 
     with pytest.raises(TypeError) as e:
-        r = Route("route.csv", "12")
+        r = Route(DIR / "route.csv", "12")
 
     with pytest.raises(ValueError) as e:
-        r = Route("route.csv", -10)
+        r = Route(DIR / "route.csv", -10)
 
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), (1, 2), 5)
-        j = Journey("route", [p])
+        j = Journey(DIR / "route", [p])
 
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), (1, 2), 5)
-        r = Route("route.csv")
+        r = Route(DIR / "route.csv")
         j = Journey(r, p)
 
     with pytest.raises(TypeError) as e:
         p = Passenger((1, 1), (1, 2), 5)
-        r = Route("route.csv")
+        r = Route(DIR / "route.csv")
         j = Journey(r, ["passenger", "passenger1"])
 
 
